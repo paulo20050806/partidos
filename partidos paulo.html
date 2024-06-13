@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partidos de la Eurocopa y Copa América</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://e00-marca.uecdn.es/assets/multimedia/imagenes/2020/05/23/15902467453575.jpg'); /* Ruta de la imagen de fondo */
+            background-size: cover; /* Ajustar la imagen al tamaño del cuerpo */
+            background-position: center; /* Centrar la imagen */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Color de fondo semi-transparente para el contenido */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="date"], select {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .matches {
+            list-style: none;
+            padding: 0;
+        }
+        .match {
+            background-color: #e0e0e0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+     <div class="container">
+        <h1>Partidos de la Eurocopa y Copa América</h1>
+        <select id="competicion" onchange="mostrarPartidos()">
+            <option value="eurocopa">Eurocopa</option>
+            <option value="copaAmerica">Copa América</option>
+        </select>
+        <input type="date" id="fecha" onchange="mostrarPartidos()">
+        <ul class="matches" id="partidos"></ul>
+        <div class="credit">hecho por Paulo Guerra</div>
+
+    <script>
+        const partidosEurocopa = {
+            '2024-06-14': [
+                { equipo1: 'Alemania', equipo2: 'Escocia', hora: '21:00' }
+            ],
+            '2024-06-15': [
+                { equipo1: 'Hungría', equipo2: 'Suiza', hora: '15:00' },
+                { equipo1: 'España', equipo2: 'Croacia', hora: '18:00' },
+                { equipo1: 'Italia', equipo2: 'Albania', hora: '21:00' }
+            ],
+            '2024-06-16': [
+                { equipo1: 'Polonia', equipo2: 'Países Bajos', hora: '15:00' },
+                { equipo1: 'Eslovenia', equipo2: 'Dinamarca', hora: '18:00' },
+                { equipo1: 'Serbia', equipo2: 'Inglaterra', hora: '21:00' }
+            ],
+            '2024-06-17': [
+                { equipo1: 'Rumanía', equipo2: 'Ucrania', hora: '15:00' },
+                { equipo1: 'Bélgica', equipo2: 'Eslovaquia', hora: '18:00' },
+                { equipo1: 'Austria', equipo2: 'Francia', hora: '21:00' }
+            ],
+            '2024-06-18': [
+                { equipo1: 'Turquía', equipo2: 'Georgia', hora: '18:00' },
+                { equipo1: 'Portugal', equipo2: 'Chequia', hora: '21:00' }
+            ],
+            '2024-06-19': [
+                { equipo1: 'Croacia', equipo2: 'Albania', hora: '15:00' },
+                { equipo1: 'Alemania', equipo2: 'Hungría', hora: '18:00' },
+                { equipo1: 'Escocia', equipo2: 'Suiza', hora: '21:00' }
+            ],
+            '2024-06-20': [
+                { equipo1: 'Eslovenia', equipo2: 'Serbia', hora: '15:00' },
+                { equipo1: 'Dinamarca', equipo2: 'Inglaterra', hora: '18:00' },
+                { equipo1: 'España', equipo2: 'Italia', hora: '21:00' }
+            ],
+            '2024-06-21': [
+                { equipo1: 'Eslovaquia', equipo2: 'Ucrania', hora: '15:00' },
+                { equipo1: 'Polonia', equipo2: 'Austria', hora: '18:00' },
+                { equipo1: 'Países Bajos', equipo2: 'Francia', hora: '21:00' }
+            ],
+            '2024-06-22': [
+                { equipo1: 'Georgia', equipo2: 'Chequia', hora: '15:00' },
+                { equipo1: 'Turquía', equipo2: 'Portugal', hora: '18:00' },
+                { equipo1: 'Bélgica', equipo2: 'Rumanía', hora: '21:00' }
+            ],
+            '2024-06-23': [
+                { equipo1: 'Suiza', equipo2: 'Alemania', hora: '21:00' },
+                { equipo1: 'Escocia', equipo2: 'Hungría', hora: '21:00' }
+            ],
+            '2024-06-24': [
+                { equipo1: 'Croacia', equipo2: 'Italia', hora: '21:00' },
+                { equipo1: 'Albania', equipo2: 'España', hora: '21:00' }
+            ],
+            '2024-06-25': [
+                { equipo1: 'Países Bajos', equipo2: 'Austria', hora: '18:00' },
+                { equipo1: 'Francia', equipo2: 'Polonia', hora: '18:00' },
+                { equipo1: 'Inglaterra', equipo2: 'Eslovenia', hora: '21:00' },
+                { equipo1: 'Dinamarca', equipo2: 'Serbia', hora: '21:00' }
+            ],
+            '2024-06-26': [
+                { equipo1: 'Eslovaquia', equipo2: 'Rumanía', hora: '18:00' },
+                { equipo1: 'Ucrania', equipo2: 'Bélgica', hora: '18:00' },
+                { equipo1: 'Chequia', equipo2: 'Turquía', hora: '21:00' },
+                { equipo1: 'Georgia', equipo2: 'Portugal', hora: '21:00' }
+            ]
+        };
+
+        const partidosCopaAmerica = {
+            '2024-06-14': [
+                { equipo1: 'Argentina', equipo2: 'Chile', hora: '20:00' }
+            ],
+            '2024-06-15': [
+                { equipo1: 'Brasil', equipo2: 'Perú', hora: '18:00' },
+                { equipo1: 'Colombia', equipo2: 'Ecuador', hora: '21:00' }
+            ],
+            '2024-06-16': [
+                { equipo1: 'Uruguay', equipo2: 'Paraguay', hora: '17:00' },
+                { equipo1: 'Bolivia', equipo2: 'Venezuela', hora: '20:00' }
+            ],
+            '2024-06-17': [
+                { equipo1: 'Argentina', equipo2: 'Perú', hora: '20:00' }
+            ],
+            '2024-06-18': [
+                { equipo1: 'Brasil', equipo2: 'Chile', hora: '18:00' },
+                { equipo1: 'Colombia', equipo2: 'Venezuela', hora: '21:00' }
+            ],
+            '2024-06-19': [
+                { equipo1: 'Uruguay', equipo2: 'Bolivia', hora: '17:00' },
+                { equipo1: 'Paraguay', equipo2: 'Ecuador', hora: '20:00' }
+            ],
+            '2024-06-20': [
+                { equipo1: 'Argentina', equipo2: 'Ecuador', hora: '20:00' }
+            ],
+            '2024-06-21': [
+                { equipo1: 'Brasil', equipo2: 'Venezuela', hora: '18:00' },
+                { equipo1: 'Chile', equipo2: 'Perú', hora: '21:00' }
+            ],
+            '2024-06-22': [
+                { equipo1: 'Colombia', equipo2: 'Paraguay', hora: '17:00' },
+                { equipo1: 'Uruguay', equipo2: 'Ecuador', hora: '20:00' }
+            ],
+            '2024-06-23': [
+                { equipo1: 'Argentina', equipo2: 'Colombia', hora: '20:00' }
+            ],
+            '2024-06-24': [
+                { equipo1: 'Brasil', equipo2: 'Paraguay', hora: '18:00' },
+                { equipo1: 'Chile', equipo2: 'Venezuela', hora: '21:00' }
+            ],
+            '2024-06-25': [
+                { equipo1: 'Perú', equipo2: 'Ecuador', hora: '18:00' },
+                { equipo1: 'Brasil', equipo2: 'Argentina', hora: '21:00' }
+            ],
+            '2024-06-26': [
+                { equipo1: 'Uruguay', equipo2: 'Colombia', hora: '17:00' },
+                { equipo1: 'Paraguay', equipo2: 'Bolivia', hora: '20:00' }
+            ]
+        };
+
+        function mostrarPartidos() {
+            const competicion = document.getElementById('competicion').value;
+            const fecha = document.getElementById('fecha').value;
+            const partidosContainer = document.getElementById('partidos');
+
+            let partidos = [];
+            if (competicion === 'eurocopa') {
+                partidos = partidosEurocopa[fecha] || [];
+            } else if (competicion === 'copaAmerica') {
+                partidos = partidosCopaAmerica[fecha] || [];
+            }
+
+            partidosContainer.innerHTML = '';
+            if (partidos.length > 0) {
+                partidos.forEach(partido => {
+                    const matchElement = document.createElement('li');
+                    matchElement.classList.add('match');
+                    matchElement.textContent = `${partido.equipo1} vs ${partido.equipo2} a las ${partido.hora}`;
+                    partidosContainer.appendChild(matchElement);
+                });
+            } else {
+                partidosContainer.textContent = 'No hay partidos para esta fecha.';
+            }
+        }
+    </script>
+</body>
+</html>
